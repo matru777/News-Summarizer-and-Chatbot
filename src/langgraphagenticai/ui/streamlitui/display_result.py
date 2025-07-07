@@ -3,11 +3,13 @@ from langchain_core.messages import HumanMessage,AIMessage,ToolMessage
 import json
 
 
+
 class DisplayResultStreamlit:
-    def __init__(self,usecase,graph,user_message):
-        self.usecase= usecase
+    def __init__(self, usecase, graph, user_message, genre=None):
+        self.usecase = usecase
         self.graph = graph
         self.user_message = user_message
+        self.genre = genre  
 
     def display_result_on_ui(self):
         usecase= self.usecase
@@ -44,11 +46,16 @@ class DisplayResultStreamlit:
 
         elif usecase == "News":
             frequency = self.user_message
+
+            genre = self.genre or "general"  # fallback default
+
             with st.spinner("Fetching and summarizing news... ⏳"):
-                result = graph.invoke({"messages": frequency})
+                result = graph.invoke({
+                    "messages": [HumanMessage(content=frequency)],
+                    "genre": genre
+                })
                 try:
-                    # Read the markdown file
-                    NEWS_PATH = f"./News/{frequency.lower()}_summary.md"
+                    NEWS_PATH = f"./News/{genre.lower()}_{frequency.lower()}_summary.md"
                     with open(NEWS_PATH, "r") as file:
                         markdown_content = file.read()
 

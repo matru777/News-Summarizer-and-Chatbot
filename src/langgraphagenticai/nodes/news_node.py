@@ -2,58 +2,40 @@ from tavily import TavilyClient
 from langchain_core.prompts import ChatPromptTemplate
 
 
+
+    
 class NewsNode:
-    def __init__(self,llm):
-        """
-        Initialize the NewsNode with API keys for Tavily and GROQ.
-        """
+    def __init__(self, llm):
         self.tavily = TavilyClient()
         self.llm = llm
-        # this is used to capture various steps in this file so that later can be use for steps shown
         self.state = {}
 
     def fetch_news(self, state: dict) -> dict:
-        """
-        Fetch news based on the specified frequency.
-        
-        Args:
-            state (dict): The state dictionary containing 'frequency'.
-        
-        Returns:
-            dict: Updated state with 'news_data' key containing fetched news.
-        """
-
         frequency = state['messages'][0].content.lower()
+        genre = state.get('genre', 'general').lower()
+
         self.state['frequency'] = frequency
+        self.state['genre'] = genre
+
         time_range_map = {'daily': 'd', 'weekly': 'w', 'monthly': 'm', 'year': 'y'}
         days_map = {'daily': 1, 'weekly': 7, 'monthly': 30, 'year': 366}
 
+        query = f"Summarize the latest {genre} news from global and Indian sources."
+
         response = self.tavily.search(
-            query="Summarize the key global and Indian news highlights across all major domains: politics, economy, technology, science, and social issues",
+            query=query,
             topic="news",
             time_range=time_range_map[frequency],
             include_answer="advanced",
             max_results=10,
             days=days_map[frequency],
-            # include_domains=["techcrunch.com", "venturebeat.com/ai", ...]  # Uncomment and add domains if needed
         )
 
         state['news_data'] = response.get('results', [])
         self.state['news_data'] = state['news_data']
         return state
-    
 
     def summarize_news(self, state: dict) -> dict:
-        """
-        Summarize the fetched news using an LLM.
-        
-        Args:
-            state (dict): The state dictionary containing 'news_data'.
-        
-        Returns:
-            dict: Updated state with 'summary' key containing the summarized news.
-        """
-
         news_items = self.state['news_data']
 
         prompt_template = ChatPromptTemplate.from_messages([
@@ -77,13 +59,17 @@ class NewsNode:
         state['summary'] = response.content
         self.state['summary'] = state['summary']
         return self.state
-    
-    def save_result(self,state):
+
+    def save_result(self, state):
         frequency = self.state['frequency']
+        genre = self.state.get("genre", "general")
         summary = self.state['summary']
-        filename = f"./News/{frequency}_summary.md"
-        with open(filename, 'w',encoding="utf-8") as f:
-            f.write(f"# {frequency.capitalize()} News Summary\n\n")
+
+        filename = f"./News/{genre}_{frequency}_summary.md"
+
+        with open(filename, 'w', encoding="utf-8") as f:
+            f.write(f"# {genre.capitalize()} - {frequency.capitalize()} News Summary\n\n")
             f.write(summary)
+
         self.state['filename'] = filename
         return self.state

@@ -51,9 +51,18 @@ class LoadStreamlitUI:
                         ["Daily", "Weekly", "Monthly"],
                         index=0
                     )
+
+                    genre = st.selectbox("🗂️ Select News Genre", [
+                            "general", "technology", "politics", "science", "economy", "social issues"]
+                            , index=0)
+
                 if st.button("🔍 Fetch Latest Global News", use_container_width=True):
                     st.session_state.IsFetchButtonClicked = True
                     st.session_state.timeframe = time_frame
+                    st.session_state.genre = genre
+
+                self.user_controls["genre"] = st.session_state.get("genre", "general")
 
 
         return self.user_controls
+    
