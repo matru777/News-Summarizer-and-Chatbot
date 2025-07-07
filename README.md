@@ -1,17 +1,48 @@
-# 🌐 Agentic Global News Summarizer (LangGraph + Streamlit)
+# 📰 News Summarizer & AI Chatbot (LangGraph + Streamlit)
 
-This project is an **agent-based global news summarization system** built using **LangGraph**, powered by **Groq LLM**, and deployed with an interactive **Streamlit UI**. It fetches global news using the **Tavily API** and summarizes them based on user-selected frequencies:
+A multi-functional AI-powered web app that allows users to:
+- Explore global and Indian news by **genre** and **timeframe**
+- Summarize the latest news with markdown-formatted highlights
+- Chat with an AI chatbot (with or without web search tools)
 
-- 📅 Daily
-- 📈 Weekly
-- 📆 Monthly
+> Built with **LangGraph**, **Streamlit**, **Groq LLMs**, and **Tavily Search API**
 
 ---
 
-## 🎯 Features
+## ✨ Features
 
-- 🔎 **Real-time News Fetching**: Uses Tavily API to retrieve current global news
-- 🧠 **Agentic Workflow**: Modular agent system (search, organize, summarize, format)
-- 🗓️ **Multiple Summary Frequencies**: Daily, weekly, or monthly
-- 🧾 **Markdown Summaries**: Nicely formatted output with headlines and key events
-- 🌐 **Streamlit UI**: Easy-to-use web interface for topic selection and summary generation
+### 📅 Time-Based News Summarization
+Select a time frame and get news summaries from the recent:
+- ✅ **Daily**
+- ✅ **Weekly**
+- ✅ **Monthly**
+
+### 🗂️ Genre-Based News Selection
+Choose from the following genres to get focused updates:
+- `General`
+- `Technology`
+- `Politics`
+- `Science`
+- `Economy`
+- `Social Issues`
+
+### 🧠 AI Chatbot Modes
+- 🔹 **Basic Chatbot** – Ask general queries
+- 🔹 **Chatbot with Web Search** – Augmented answers using Tavily
+
+---
+
+## 📌 Tech Stack
+
+| Component | Purpose |
+|----------|---------|
+| `Streamlit` | Frontend UI |
+| `LangGraph` | Graph-based agent flow |
+| `Groq LLM` | Language Model (e.g. Mixtral, Gemma) |
+| `Tavily API` | Web search for summarization |
+| `LangChain` | Tool and agent abstractions |
+
+---
+
+
+
